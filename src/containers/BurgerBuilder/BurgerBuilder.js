@@ -17,6 +17,18 @@ const BurgerBuilder = () => {
     meat: 0,
   });
   const [totalPrice, setTotalPrice] = React.useState(4);
+  const [canOrder, setCanOrder] = React.useState(false);
+
+  const updateCanOrderState = (updatedIngredients) => {
+    const sum = Object.keys(updatedIngredients)
+      .map((igKey) => {
+        return updatedIngredients[igKey];
+      })
+      .reduce((sum, el) => {
+        return sum + el;
+      }, 0);
+    setCanOrder(sum > 0);
+  };
 
   const addIngredient = (type) => {
     const updatedIngredients = {
@@ -25,6 +37,7 @@ const BurgerBuilder = () => {
     updatedIngredients[type] = ingredients[type] + 1;
     setTotalPrice(totalPrice + INGREDIENT_PRICES[type]);
     setIngredients(updatedIngredients);
+    updateCanOrderState(updatedIngredients);
   };
 
   const removeIngredient = (type) => {
@@ -33,9 +46,11 @@ const BurgerBuilder = () => {
     };
     if (ingredients[type] > 0) {
       updatedIngredients[type] = ingredients[type] - 1;
-      setTotalPrice(INGREDIENT_PRICES[type] - totalPrice);
+
+      setTotalPrice(totalPrice - INGREDIENT_PRICES[type]);
       setIngredients(updatedIngredients);
     }
+    updateCanOrderState(updatedIngredients);
   };
 
   const disabledInfo = {
@@ -52,6 +67,7 @@ const BurgerBuilder = () => {
         ingredientRemoved={removeIngredient}
         disabled={disabledInfo}
         price={totalPrice}
+        canOrder={canOrder}
       />
     </>
   );
