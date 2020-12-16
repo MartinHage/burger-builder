@@ -1,13 +1,11 @@
 import React from "react";
-import classes from "./Layout.css" 
+import "./Layout.css";
 
-const layout = props => (
-    <>
-        <div>toolbar, sidedrawer, backdrop</div>
-        <main className="Content">
-            {props.children}
-        </main>
-    </>
+const Layout = (props) => (
+  <>
+    <div>Toolbar, SideDrawer, Backdrop</div>
+    <main className="Content">{props.children}</main>
+  </>
 );
 
-export default layout;
+export default Layout;
