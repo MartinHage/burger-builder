@@ -1,6 +1,7 @@
 import React from "react";
 import BuildControls from "../../components/Burger/BuildControls/BuildControls";
 import Burger from "../../components/Burger/Burger";
+import Modal from "../../components/UI/Modal/Modal";
 
 const INGREDIENT_PRICES = {
   salad: 0.5,
@@ -46,7 +47,6 @@ const BurgerBuilder = () => {
     };
     if (ingredients[type] > 0) {
       updatedIngredients[type] = ingredients[type] - 1;
-
       setTotalPrice(totalPrice - INGREDIENT_PRICES[type]);
       setIngredients(updatedIngredients);
     }
@@ -61,6 +61,7 @@ const BurgerBuilder = () => {
   }
   return (
     <>
+      <Modal></Modal>
       <Burger ingredients={ingredients} />
       <BuildControls
         ingredientAdded={addIngredient}
