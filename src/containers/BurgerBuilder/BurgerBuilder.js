@@ -20,6 +20,7 @@ const BurgerBuilder = () => {
   });
   const [totalPrice, setTotalPrice] = React.useState(4);
   const [canOrder, setCanOrder] = React.useState(false);
+  const [purchasing, setPurchasing] = React.useState(false);
 
   const updateCanOrderState = (updatedIngredients) => {
     const sum = Object.keys(updatedIngredients)
@@ -62,7 +63,7 @@ const BurgerBuilder = () => {
   }
   return (
     <>
-      <Modal>
+      <Modal show={purchasing}>
         <OrderSummary ingredients={ingredients} />
       </Modal>
       <Burger ingredients={ingredients} />
@@ -72,6 +73,7 @@ const BurgerBuilder = () => {
         disabled={disabledInfo}
         price={totalPrice}
         canOrder={canOrder}
+        setPurchasing={setPurchasing}
       />
     </>
   );
