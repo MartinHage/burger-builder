@@ -55,6 +55,10 @@ const BurgerBuilder = () => {
     updateCanOrderState(updatedIngredients);
   };
 
+  const purchaseContinueHandler = () => {
+    alert("You continue!");
+  };
+
   const disabledInfo = {
     ...ingredients,
   };
@@ -64,7 +68,11 @@ const BurgerBuilder = () => {
   return (
     <>
       <Modal show={purchasing} modalClosed={() => setPurchasing(false)}>
-        <OrderSummary ingredients={ingredients} />
+        <OrderSummary
+          ingredients={ingredients}
+          purchaseCanceled={() => setPurchasing(false)}
+          purchaseContinued={purchaseContinueHandler}
+        />
       </Modal>
       <Burger ingredients={ingredients} />
       <BuildControls
