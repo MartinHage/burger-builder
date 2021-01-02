@@ -25,3 +25,7 @@
 .Close {
   transform: translateX(-100%);
 }
+
+.SideDrawer-Logo {
+  height: 11%;
+}
