@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "../../axios-orders";
 import BuildControls from "../../components/Burger/BuildControls/BuildControls";
 import Burger from "../../components/Burger/Burger";
 import OrderSummary from "../../components/Burger/OrderSummary/OrderSummary";
@@ -56,7 +57,25 @@ const BurgerBuilder = () => {
   };
 
   const purchaseContinueHandler = () => {
-    alert("You continue!");
+    //alert("You continue!");
+    const order = {
+      ingredients: ingredients,
+      price: totalPrice,
+      customer: {
+        name: "Kevin Gran",
+        address: {
+          street: "Teststreet 1",
+          zipCode: "14248",
+          country: "Sweden",
+        },
+        email: "test@test.com",
+      },
+      deliveryMethod: "fastest",
+    };
+    axios
+      .post("/orders.json", order)
+      .then((res) => console.log(res))
+      .catch((error) => console.log(error));
   };
 
   const disabledInfo = {
