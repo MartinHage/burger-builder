@@ -4,6 +4,7 @@ import BuildControls from "../../components/Burger/BuildControls/BuildControls";
 import Burger from "../../components/Burger/Burger";
 import OrderSummary from "../../components/Burger/OrderSummary/OrderSummary";
 import Modal from "../../components/UI/Modal/Modal";
+import Spinner from "../../components/UI/Spinner/Spinner";
 
 const INGREDIENT_PRICES = {
   salad: 0.5,
@@ -22,6 +23,7 @@ const BurgerBuilder = () => {
   const [totalPrice, setTotalPrice] = React.useState(4);
   const [canOrder, setCanOrder] = React.useState(false);
   const [purchasing, setPurchasing] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const updateCanOrderState = (updatedIngredients) => {
     const sum = Object.keys(updatedIngredients)
@@ -58,6 +60,7 @@ const BurgerBuilder = () => {
 
   const purchaseContinueHandler = () => {
     //alert("You continue!");
+    setIsLoading(true);
     const order = {
       ingredients: ingredients,
       price: totalPrice,
@@ -74,8 +77,14 @@ const BurgerBuilder = () => {
     };
     axios
       .post("/orders.json", order)
-      .then((res) => console.log(res))
-      .catch((error) => console.log(error));
+      .then(() => {
+        setIsLoading(false);
+        setPurchasing(false);
+      })
+      .catch(() => {
+        setIsLoading(false);
+        setPurchasing(false);
+      });
   };
 
   const disabledInfo = {
@@ -84,15 +93,21 @@ const BurgerBuilder = () => {
   for (const key in disabledInfo) {
     disabledInfo[key] = disabledInfo[key] <= 0;
   }
+  let orderSummary = (
+    <OrderSummary
+      ingredients={ingredients}
+      price={totalPrice}
+      purchaseCanceled={() => setPurchasing(false)}
+      purchaseContinued={purchaseContinueHandler}
+    />
+  );
+  if (isLoading) {
+    orderSummary = <Spinner />;
+  }
   return (
     <>
       <Modal show={purchasing} modalClosed={() => setPurchasing(false)}>
-        <OrderSummary
-          ingredients={ingredients}
-          price={totalPrice}
-          purchaseCanceled={() => setPurchasing(false)}
-          purchaseContinued={purchaseContinueHandler}
-        />
+        {orderSummary}
       </Modal>
       <Burger ingredients={ingredients} />
       <BuildControls
