@@ -15,16 +15,23 @@ const INGREDIENT_PRICES = {
 };
 
 const BurgerBuilder = () => {
-  const [ingredients, setIngredients] = React.useState({
-    salad: 0,
-    bacon: 0,
-    cheese: 0,
-    meat: 0,
-  });
+  const [ingredients, setIngredients] = React.useState(null);
   const [totalPrice, setTotalPrice] = React.useState(4);
   const [canOrder, setCanOrder] = React.useState(false);
   const [purchasing, setPurchasing] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
+  const [error, setError] = React.useState(false);
+
+  React.useEffect(() => {
+    axios
+      .get("ingredients.json")
+      .then((res) => {
+        setIngredients(res.data);
+      })
+      .catch(() => {
+        setError(true);
+      });
+  }, []);
 
   const updateCanOrderState = (updatedIngredients) => {
     const sum = Object.keys(updatedIngredients)
@@ -94,31 +101,44 @@ const BurgerBuilder = () => {
   for (const key in disabledInfo) {
     disabledInfo[key] = disabledInfo[key] <= 0;
   }
-  let orderSummary = (
-    <OrderSummary
-      ingredients={ingredients}
-      price={totalPrice}
-      purchaseCanceled={() => setPurchasing(false)}
-      purchaseContinued={purchaseContinueHandler}
-    />
-  );
+  let orderSummary = null;
+
+  if (ingredients) {
+    orderSummary = (
+      <OrderSummary
+        ingredients={ingredients}
+        price={totalPrice}
+        purchaseCanceled={() => setPurchasing(false)}
+        purchaseContinued={purchaseContinueHandler}
+      />
+    );
+  }
   if (isLoading) {
     orderSummary = <Spinner />;
+  }
+
+  let burger = error ? <p>Ingredients can not be loaded!</p> : <Spinner />;
+  if (ingredients) {
+    burger = (
+      <>
+        <Burger ingredients={ingredients} />{" "}
+        <BuildControls
+          ingredientAdded={addIngredient}
+          ingredientRemoved={removeIngredient}
+          disabled={disabledInfo}
+          price={totalPrice}
+          canOrder={canOrder}
+          setPurchasing={setPurchasing}
+        />
+      </>
+    );
   }
   return (
     <>
       <Modal show={purchasing} modalClosed={() => setPurchasing(false)}>
         {orderSummary}
       </Modal>
-      <Burger ingredients={ingredients} />
-      <BuildControls
-        ingredientAdded={addIngredient}
-        ingredientRemoved={removeIngredient}
-        disabled={disabledInfo}
-        price={totalPrice}
-        canOrder={canOrder}
-        setPurchasing={setPurchasing}
-      />
+      {burger}
     </>
   );
 };
