@@ -8,14 +8,20 @@ const withErrorHandler = (WrappedComponent, axios) => {
       setError(null);
     };
     React.useEffect(() => {
-      axios.interceptors.request.use((req) => {
+      // Anything in here is fired on component mount.
+      const reqInterceptor = axios.interceptors.request.use((req) => {
         setError(null);
         return req;
       });
-      axios.interceptors.response.use(
+      const resInterceptor = axios.interceptors.response.use(
         (res) => res,
         (error) => setError(error)
       );
+      return () => {
+        // Anything in here is fired on component unmount.
+        axios.interceptors.request.eject(reqInterceptor);
+        axios.interceptors.response.eject(resInterceptor);
+      };
     }, []);
     return (
       <>
