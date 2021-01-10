@@ -1,6 +1,7 @@
 import React from "react";
 import BurgerIngredient from "./BurgerIngredient/BurgerIngredient";
 import "./Burger.css";
+import { withRouter } from "react-router-dom";
 
 const Burger = (props) => {
   let transformedIngredients = Object.keys(props.ingredients)
@@ -25,4 +26,4 @@ const Burger = (props) => {
   );
 };
 
-export default Burger;
+export default withRouter(Burger);

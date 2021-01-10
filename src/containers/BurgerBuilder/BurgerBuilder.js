@@ -14,7 +14,7 @@ const INGREDIENT_PRICES = {
   meat: 0.7,
 };
 
-const BurgerBuilder = () => {
+const BurgerBuilder = (props) => {
   const [ingredients, setIngredients] = React.useState(null);
   const [totalPrice, setTotalPrice] = React.useState(4);
   const [canOrder, setCanOrder] = React.useState(false);
@@ -68,6 +68,7 @@ const BurgerBuilder = () => {
 
   const purchaseContinueHandler = () => {
     //alert("You continue!");
+    /*
     setIsLoading(true);
     const order = {
       ingredients: ingredients,
@@ -93,6 +94,16 @@ const BurgerBuilder = () => {
         setIsLoading(false);
         setPurchasing(false);
       });
+      */
+
+    const queryParams = [];
+    for (const i in ingredients) {
+      queryParams.push(
+        encodeURIComponent(i) + "=" + encodeURIComponent(ingredients[i])
+      );
+    }
+    const queryString = queryParams.join("&");
+    props.history.push({ pathname: "/checkout", search: `?${queryString}` });
   };
 
   const disabledInfo = {
