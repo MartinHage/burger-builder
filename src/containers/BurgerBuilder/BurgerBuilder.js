@@ -24,7 +24,7 @@ const BurgerBuilder = (props) => {
 
   React.useEffect(() => {
     axios
-      .get("ingredients.jso")
+      .get("ingredients.json")
       .then((res) => {
         setIngredients(res.data);
       })
