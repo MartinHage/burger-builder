@@ -4,20 +4,22 @@ import CheckoutSummary from "../../components/Order/CheckoutSummary/CheckoutSumm
 import ContactData from "./ContactData/ContactData";
 
 const Checkout = (props) => {
-  const [ingredients, setIngredient] = React.useState({
-    salad: 0,
-    meat: 0,
-    cheese: 0,
-    bacon: 0,
-  });
-
+  const [ingredients, setIngredient] = React.useState({});
+  const [totalPrice, setTotalPrice] = React.useState(0);
   React.useEffect(() => {
     const query = new URLSearchParams(props.location.search);
     const queryIngredients = {};
+    let price = 0;
     for (const param of query.entries()) {
-      queryIngredients[param[0]] = +param[1];
+      if (param[0] === "price") {
+        price = param[1];
+      } else {
+        queryIngredients[param[0]] = +param[1];
+      }
     }
     setIngredient(queryIngredients);
+    setTotalPrice(price);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const checkoutCancelledHandler = () => {
@@ -36,7 +38,13 @@ const Checkout = (props) => {
       />
       <Route
         path={`${props.match.path}/contact-data`}
-        component={ContactData}
+        render={(props) => (
+          <ContactData
+            ingredients={ingredients}
+            price={totalPrice}
+            {...props}
+          />
+        )}
       />
     </div>
   );

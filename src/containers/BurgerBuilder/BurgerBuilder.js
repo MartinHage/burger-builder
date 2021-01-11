@@ -69,31 +69,7 @@ const BurgerBuilder = (props) => {
   const purchaseContinueHandler = () => {
     //alert("You continue!");
     /*
-    setIsLoading(true);
-    const order = {
-      ingredients: ingredients,
-      price: totalPrice,
-      customer: {
-        name: "Kevin Gran",
-        address: {
-          street: "Teststreet 1",
-          zipCode: "14248",
-          country: "Sweden",
-        },
-        email: "test@test.com",
-      },
-      deliveryMethod: "fastest",
-    };
-    axios
-      .post("/orders.json", order)
-      .then(() => {
-        setIsLoading(false);
-        setPurchasing(false);
-      })
-      .catch(() => {
-        setIsLoading(false);
-        setPurchasing(false);
-      });
+    
       */
 
     const queryParams = [];
@@ -102,6 +78,7 @@ const BurgerBuilder = (props) => {
         encodeURIComponent(i) + "=" + encodeURIComponent(ingredients[i])
       );
     }
+    queryParams.push(`price=${totalPrice}`);
     const queryString = queryParams.join("&");
     props.history.push({ pathname: "/checkout", search: `?${queryString}` });
   };
