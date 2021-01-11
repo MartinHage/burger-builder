@@ -9,9 +9,8 @@ const Orders = () => {
 
   React.useEffect(() => {
     axios
-      .get("/orders")
+      .get("/orders.json")
       .then((res) => {
-        console.log(res);
         const fetchedOrders = [];
         for (const key in res.data) {
           fetchedOrders.push({ ...res.data[key], id: key });
@@ -23,9 +22,16 @@ const Orders = () => {
         setIsLoading(false);
       });
   }, []);
+
   return (
     <div>
-      <Order /> <Order />
+      {orders.map((order) => (
+        <Order
+          key={order.id}
+          ingredients={order.ingredients}
+          price={order.price}
+        />
+      ))}
     </div>
   );
 };
