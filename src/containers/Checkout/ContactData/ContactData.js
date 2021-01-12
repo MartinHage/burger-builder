@@ -78,6 +78,14 @@ const ContactData = (props) => {
       });
   };
 
+  const inputChangedHandler = (e, inputIdentifier) => {
+    const updatedOrderForm = { ...orderForm };
+    const updatedFormElement = { ...updatedOrderForm[inputIdentifier] };
+    updatedFormElement.value = e.target.value;
+    updatedOrderForm[inputIdentifier] = updatedFormElement;
+    setOrderForm(updatedOrderForm);
+  };
+
   const formElementsArray = [];
   for (const key in orderForm) {
     formElementsArray.push({ id: key, config: orderForm[key] });
@@ -96,6 +104,9 @@ const ContactData = (props) => {
               elementType={formElement.config.elementType}
               elementConfig={formElement.config.elementConfig}
               value={formElement.config.value}
+              changed={(e) => {
+                inputChangedHandler(e, formElement.id);
+              }}
             />
           ))}
           <Button type="Success" clicked={orderHandler}>
