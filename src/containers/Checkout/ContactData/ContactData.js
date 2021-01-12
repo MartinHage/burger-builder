@@ -4,15 +4,15 @@ import axios from "../../../axios-orders";
 
 import "./ContactData.css";
 import Spinner from "../../../components/UI/Spinner/Spinner";
+import Input from "../../../components/UI/Input/Input";
 const ContactData = (props) => {
-  /*
-    const [name, setName] = React.useState("");
+  const [name, setName] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [address, setAddress] = React.useState({
     street: "",
-    postalCode: "",
+    zipcode: "",
+    country: "",
   });
-  */
   const [isLoading, setIsLoading] = React.useState(false);
 
   const orderHandler = (e) => {
@@ -49,26 +49,26 @@ const ContactData = (props) => {
         <Spinner />
       ) : (
         <form>
-          <input
-            className="Input"
+          <Input
+            inputtype="input"
             type="text"
             name="name"
             placeholder="Your name"
           />
-          <input
-            className="Input"
+          <Input
+            inputtype="input"
             type="email"
             name="email"
             placeholder="Your email"
           />
-          <input
-            className="Input"
+          <Input
+            inputtype="input"
             type="text"
             name="street"
             placeholder="Your street"
           />
-          <input
-            className="Input"
+          <Input
+            inputtype="input"
             type="text"
             name="postal"
             placeholder="Postal code"
