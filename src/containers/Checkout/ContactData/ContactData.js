@@ -15,6 +15,10 @@ const ContactData = (props) => {
         placeholder: "Your Name",
       },
       value: "",
+      validation: {
+        required: true,
+      },
+      valid: false,
     },
     street: {
       elementType: "input",
@@ -23,6 +27,10 @@ const ContactData = (props) => {
         placeholder: "Street",
       },
       value: "",
+      validation: {
+        required: true,
+      },
+      valid: false,
     },
     zipCode: {
       elementType: "input",
@@ -31,6 +39,12 @@ const ContactData = (props) => {
         placeholder: "Zipcode",
       },
       value: "",
+      validation: {
+        required: true,
+        minLength: 5,
+        maxLength: 5,
+      },
+      valid: false,
     },
     country: {
       elementType: "input",
@@ -39,6 +53,10 @@ const ContactData = (props) => {
         placeholder: "Country",
       },
       value: "",
+      validation: {
+        required: true,
+      },
+      valid: false,
     },
     email: {
       elementType: "input",
@@ -47,6 +65,10 @@ const ContactData = (props) => {
         placeholder: "Your Email",
       },
       value: "",
+      validation: {
+        required: true,
+      },
+      valid: false,
     },
     deliveryMethod: {
       elementType: "select",
@@ -84,6 +106,20 @@ const ContactData = (props) => {
       });
   };
 
+  const checkValidity = (value, rules) => {
+    let isValid = true;
+    if (rules.required) {
+      isValid = value.trim() !== "" && isValid;
+    }
+    if (rules.minLength) {
+      isValid = value.length >= rules.minLength && isValid;
+    }
+    if (rules.maxLength) {
+      isValid = value.length <= rules.maxLength && isValid;
+    }
+    return isValid;
+  };
+
   const inputChangedHandler = (e, inputIdentifier) => {
     const updatedOrderForm = {
       ...orderForm,
@@ -92,6 +128,11 @@ const ContactData = (props) => {
       ...updatedOrderForm[inputIdentifier],
     };
     updatedFormElement.value = e.target.value;
+    updatedFormElement.valid = checkValidity(
+      updatedFormElement.value,
+      updatedFormElement.validation
+    );
+    console.log(updatedFormElement.valid);
     updatedOrderForm[inputIdentifier] = updatedFormElement;
     setOrderForm(updatedOrderForm);
   };
