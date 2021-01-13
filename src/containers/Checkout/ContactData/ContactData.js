@@ -19,6 +19,7 @@ const ContactData = (props) => {
         required: true,
       },
       valid: false,
+      touched: false,
     },
     street: {
       elementType: "input",
@@ -31,6 +32,7 @@ const ContactData = (props) => {
         required: true,
       },
       valid: false,
+      touched: false,
     },
     zipCode: {
       elementType: "input",
@@ -45,6 +47,7 @@ const ContactData = (props) => {
         maxLength: 5,
       },
       valid: false,
+      touched: false,
     },
     country: {
       elementType: "input",
@@ -57,6 +60,7 @@ const ContactData = (props) => {
         required: true,
       },
       valid: false,
+      touched: false,
     },
     email: {
       elementType: "input",
@@ -69,6 +73,7 @@ const ContactData = (props) => {
         required: true,
       },
       valid: false,
+      touched: false,
     },
     deliveryMethod: {
       elementType: "select",
@@ -132,7 +137,7 @@ const ContactData = (props) => {
       updatedFormElement.value,
       updatedFormElement.validation
     );
-    console.log(updatedFormElement.valid);
+    updatedFormElement.touched = true;
     updatedOrderForm[inputIdentifier] = updatedFormElement;
     setOrderForm(updatedOrderForm);
   };
@@ -155,6 +160,9 @@ const ContactData = (props) => {
               elementType={formElement.config.elementType}
               elementConfig={formElement.config.elementConfig}
               value={formElement.config.value}
+              invalid={!formElement.config.valid}
+              shouldValidate={formElement.config.validation}
+              touched={formElement.config.touched}
               changed={(e) => {
                 inputChangedHandler(e, formElement.id);
               }}
