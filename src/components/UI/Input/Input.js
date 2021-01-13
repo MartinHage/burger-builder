@@ -57,10 +57,16 @@ const Input = (props) => {
       break;
   }
 
+  let validationError = null;
+  if (props.invalid && props.touched) {
+    validationError = <p className="ValidationError">{props.errorMessage}</p>;
+  }
+
   return (
     <div className="Input">
       <label className="Label">{props.label}</label>
       {inputElement}
+      {validationError}
     </div>
   );
 };

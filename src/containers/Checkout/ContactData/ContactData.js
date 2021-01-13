@@ -20,6 +20,7 @@ const ContactData = (props) => {
       },
       valid: false,
       touched: false,
+      errorMessage: "Please enter a valid name",
     },
     street: {
       elementType: "input",
@@ -33,6 +34,7 @@ const ContactData = (props) => {
       },
       valid: false,
       touched: false,
+      errorMessage: "Please enter a valid street",
     },
     zipCode: {
       elementType: "input",
@@ -48,6 +50,7 @@ const ContactData = (props) => {
       },
       valid: false,
       touched: false,
+      errorMessage: "Please enter a zipcode of 5 characters",
     },
     country: {
       elementType: "input",
@@ -61,6 +64,7 @@ const ContactData = (props) => {
       },
       valid: false,
       touched: false,
+      errorMessage: "Please enter a valid country",
     },
     email: {
       elementType: "input",
@@ -74,6 +78,7 @@ const ContactData = (props) => {
       },
       valid: false,
       touched: false,
+      errorMessage: "Please enter a valid email",
     },
     deliveryMethod: {
       elementType: "select",
@@ -84,9 +89,11 @@ const ContactData = (props) => {
         ],
       },
       value: "",
+      valid: true,
     },
   });
   const [isLoading, setIsLoading] = React.useState(false);
+  const [formIsValid, setFormIsValid] = React.useState(false);
 
   const orderHandler = (e) => {
     e.preventDefault();
@@ -139,6 +146,13 @@ const ContactData = (props) => {
     );
     updatedFormElement.touched = true;
     updatedOrderForm[inputIdentifier] = updatedFormElement;
+
+    let formValid = true;
+    for (const inputIdentifier in updatedOrderForm) {
+      formValid = updatedOrderForm[inputIdentifier].valid && formValid;
+    }
+    setFormIsValid(formValid);
+    console.log(formValid);
     setOrderForm(updatedOrderForm);
   };
 
@@ -163,12 +177,15 @@ const ContactData = (props) => {
               invalid={!formElement.config.valid}
               shouldValidate={formElement.config.validation}
               touched={formElement.config.touched}
+              errorMessage={formElement.config.errorMessage}
               changed={(e) => {
                 inputChangedHandler(e, formElement.id);
               }}
             />
           ))}
-          <Button type="Success">ORDER</Button>
+          <Button type="Success" disabled={!formIsValid}>
+            ORDER
+          </Button>
         </form>
       )}
     </div>
