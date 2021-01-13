@@ -5,6 +5,7 @@ import axios from "../../../axios-orders";
 import "./ContactData.css";
 import Spinner from "../../../components/UI/Spinner/Spinner";
 import Input from "../../../components/UI/Input/Input";
+
 const ContactData = (props) => {
   const [orderForm, setOrderForm] = React.useState({
     name: {
@@ -63,9 +64,14 @@ const ContactData = (props) => {
   const orderHandler = (e) => {
     e.preventDefault();
     setIsLoading(true);
+    const formData = {};
+    for (const formElementIdentifier in orderForm) {
+      formData[formElementIdentifier] = orderForm[formElementIdentifier].value;
+    }
     const order = {
       ingredients: props.ingredients,
       price: props.price,
+      orderData: formData,
     };
     axios
       .post("/orders.json", order)
@@ -79,8 +85,12 @@ const ContactData = (props) => {
   };
 
   const inputChangedHandler = (e, inputIdentifier) => {
-    const updatedOrderForm = { ...orderForm };
-    const updatedFormElement = { ...updatedOrderForm[inputIdentifier] };
+    const updatedOrderForm = {
+      ...orderForm,
+    };
+    const updatedFormElement = {
+      ...updatedOrderForm[inputIdentifier],
+    };
     updatedFormElement.value = e.target.value;
     updatedOrderForm[inputIdentifier] = updatedFormElement;
     setOrderForm(updatedOrderForm);
@@ -97,7 +107,7 @@ const ContactData = (props) => {
       {isLoading ? (
         <Spinner />
       ) : (
-        <form>
+        <form onSubmit={orderHandler}>
           {formElementsArray.map((formElement) => (
             <Input
               key={formElement.id}
@@ -109,9 +119,7 @@ const ContactData = (props) => {
               }}
             />
           ))}
-          <Button type="Success" clicked={orderHandler}>
-            ORDER
-          </Button>
+          <Button type="Success">ORDER</Button>
         </form>
       )}
     </div>
