@@ -22,6 +22,7 @@ const BurgerBuilder = (props) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [error, setError] = React.useState(false);
 
+  /*
   React.useEffect(() => {
     axios
       .get("ingredients.json")
@@ -32,6 +33,7 @@ const BurgerBuilder = (props) => {
         setError(true);
       });
   }, []);
+  */
 
   const updateCanOrderState = (updatedIngredients) => {
     const sum = Object.keys(updatedIngredients)
