@@ -96,12 +96,10 @@ const ContactData = (props) => {
       valid: true,
     },
   });
-  const [isLoading, setIsLoading] = React.useState(false);
   const [formIsValid, setFormIsValid] = React.useState(false);
 
   const orderHandler = (e) => {
     e.preventDefault();
-    setIsLoading(true);
     const formData = {};
     for (const formElementIdentifier in orderForm) {
       formData[formElementIdentifier] = orderForm[formElementIdentifier].value;
@@ -159,7 +157,7 @@ const ContactData = (props) => {
   return (
     <div className="ContactData">
       <h4>Enter your Contact Data</h4>{" "}
-      {isLoading ? (
+      {props.isLoading ? (
         <Spinner />
       ) : (
         <form onSubmit={orderHandler}>
@@ -191,13 +189,13 @@ const mapStateToProps = (state) => {
   return {
     ings: state.ingredients,
     price: state.totalPrice,
+    isLoading: state.loading,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onOrderBurger: (orderData) =>
-      dispatch(actions.purchaseBurgerStart(orderData)),
+    onOrderBurger: (orderData) => dispatch(actions.purchaseBurger(orderData)),
   };
 };
 
