@@ -7,25 +7,14 @@ import OrderSummary from "../../components/Burger/OrderSummary/OrderSummary";
 import Modal from "../../components/UI/Modal/Modal";
 import Spinner from "../../components/UI/Spinner/Spinner";
 import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
-import * as actionTypes from "../../store/actions";
+import * as actions from "../../store/actions/index";
 
 const BurgerBuilder = (props) => {
   const [purchasing, setPurchasing] = React.useState(false);
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [error, setError] = React.useState(false);
 
-  /*
   React.useEffect(() => {
-    axios
-      .get("ingredients.json")
-      .then((res) => {
-        setIngredients(res.data);
-      })
-      .catch(() => {
-        setError(true);
-      });
+    props.onInitIngredients();
   }, []);
-  */
 
   const updatePurchaseState = (ingredients) => {
     const sum = Object.keys(ingredients)
@@ -60,11 +49,12 @@ const BurgerBuilder = (props) => {
       />
     );
   }
-  if (isLoading) {
-    orderSummary = <Spinner />;
-  }
 
-  let burger = error ? <p>Ingredients can not be loaded!</p> : <Spinner />;
+  let burger = props.error ? (
+    <p>Ingredients can not be loaded!</p>
+  ) : (
+    <Spinner />
+  );
   if (props.ings) {
     burger = (
       <>
@@ -94,18 +84,16 @@ const mapStateToProps = (state) => {
   return {
     ings: state.ingredients,
     price: state.totalPrice,
+    error: state.error,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onIngredientAdded: (ingName) =>
-      dispatch({ type: actionTypes.ADD_INGREDIENT, ingredientName: ingName }),
+    onIngredientAdded: (ingName) => dispatch(actions.addIngredient(ingName)),
     onIngredientRemoved: (ingName) =>
-      dispatch({
-        type: actionTypes.REMOVE_INGREDIENT,
-        ingredientName: ingName,
-      }),
+      dispatch(actions.removeIngredient(ingName)),
+    onInitIngredients: () => dispatch(actions.initIngredients()),
   };
 };
 
