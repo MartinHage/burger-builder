@@ -4,8 +4,10 @@ import axios from "../../../axios-orders";
 
 import "./ContactData.css";
 import Spinner from "../../../components/UI/Spinner/Spinner";
+import withErrorHandler from "../../../hoc/withErrorHandler/withErrorHandler";
 import Input from "../../../components/UI/Input/Input";
 import { connect } from "react-redux";
+import * as actions from "../../../store/actions/index";
 
 const ContactData = (props) => {
   const [orderForm, setOrderForm] = React.useState({
@@ -109,15 +111,7 @@ const ContactData = (props) => {
       price: props.price,
       orderData: formData,
     };
-    axios
-      .post("/orders.json", order)
-      .then(() => {
-        setIsLoading(false);
-        props.history.push("/");
-      })
-      .catch(() => {
-        setIsLoading(false);
-      });
+    props.onOrderBurger(order);
   };
 
   const checkValidity = (value, rules) => {
@@ -200,4 +194,14 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(ContactData);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onOrderBurger: (orderData) =>
+      dispatch(actions.purchaseBurgerStart(orderData)),
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withErrorHandler(ContactData, axios));
