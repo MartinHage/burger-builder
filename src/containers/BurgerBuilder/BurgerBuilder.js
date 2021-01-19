@@ -28,6 +28,7 @@ const BurgerBuilder = (props) => {
   };
 
   const purchaseContinueHandler = () => {
+    props.onInitPurchase();
     props.history.push("/checkout");
   };
 
@@ -82,9 +83,9 @@ const BurgerBuilder = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    ings: state.ingredients,
-    price: state.totalPrice,
-    error: state.error,
+    ings: state.burgerBuilder.ingredients,
+    price: state.burgerBuilder.totalPrice,
+    error: state.burgerBuilder.error,
   };
 };
 
@@ -94,6 +95,7 @@ const mapDispatchToProps = (dispatch) => {
     onIngredientRemoved: (ingName) =>
       dispatch(actions.removeIngredient(ingName)),
     onInitIngredients: () => dispatch(actions.initIngredients()),
+    onInitPurchase: () => dispatch(actions.purchaseInit()),
   };
 };
 

@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { Redirect, Route } from "react-router-dom";
 import CheckoutSummary from "../../components/Order/CheckoutSummary/CheckoutSummary";
 import ContactData from "./ContactData/ContactData";
+import * as actions from "../../store/actions/index";
 
 const Checkout = (props) => {
   const checkoutCancelledHandler = () => {
@@ -11,9 +12,10 @@ const Checkout = (props) => {
   const checkoutContinuedHandler = () => {
     props.history.replace(`checkout/contact-data`);
   };
+
   return (
     <>
-      {props.ings ? (
+      {props.ings && !props.purchased ? (
         <div>
           <CheckoutSummary
             ingredients={props.ings}
@@ -34,7 +36,8 @@ const Checkout = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    ings: state.ingredients,
+    ings: state.burgerBuilder.ingredients,
+    purchased: state.order.purchased,
   };
 };
 
