@@ -41,4 +41,10 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(Checkout);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onPurchaseInit: dispatch(actions.purchaseInit()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Checkout);

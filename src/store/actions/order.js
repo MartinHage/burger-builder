@@ -16,7 +16,7 @@ export const purchaseBurgerFail = (error) => {
   };
 };
 
-export const purchaseBurgerStart = (error) => {
+export const purchaseBurgerStart = () => {
   return {
     type: actionTypes.PURCHASE_BURGER_START,
   };
@@ -36,7 +36,7 @@ export const purchaseBurger = (orderData) => {
   };
 };
 
-export const purchaseInit = (error) => {
+export const purchaseInit = () => {
   return {
     type: actionTypes.PURCHASE_INIT,
   };
