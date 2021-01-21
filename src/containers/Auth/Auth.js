@@ -2,8 +2,10 @@ import React from "react";
 import Input from "../../components/UI/Input/Input";
 import Button from "../../components/UI/Button/Button";
 import "./Auth.css";
+import * as actions from "../../store/actions/index";
+import { connect } from "react-redux";
 
-const Auth = () => {
+const Auth = (props) => {
   const [controls, setControls] = React.useState({
     email: {
       elementType: "input",
@@ -78,13 +80,18 @@ const Auth = () => {
     setControls(updatedControls);
   };
 
+  const submitHandler = (event) => {
+    event.preventDefault();
+    props.onAuth(controls.email.value, controls.password.value);
+  };
+
   const formElementsArray = [];
   for (const key in controls) {
     formElementsArray.push({ id: key, config: controls[key] });
   }
   return (
     <div className="Auth">
-      <form>
+      <form onSubmit={submitHandler}>
         {formElementsArray.map((formElement) => (
           <Input
             key={formElement.id}
@@ -106,4 +113,10 @@ const Auth = () => {
   );
 };
 
-export default Auth;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onAuth: (email, password) => dispatch(actions.auth(email, password)),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(Auth);
