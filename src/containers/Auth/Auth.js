@@ -4,6 +4,7 @@ import Button from "../../components/UI/Button/Button";
 import "./Auth.css";
 import * as actions from "../../store/actions/index";
 import { connect } from "react-redux";
+import Spinner from "../../components/UI/Spinner/Spinner";
 
 const Auth = (props) => {
   const [isSignup, setIsSignup] = React.useState(true);
@@ -90,24 +91,30 @@ const Auth = (props) => {
   for (const key in controls) {
     formElementsArray.push({ id: key, config: controls[key] });
   }
+
   return (
     <div className="Auth">
+      {props.error && <p>{props.error.message}</p>}
       <form onSubmit={submitHandler}>
-        {formElementsArray.map((formElement) => (
-          <Input
-            key={formElement.id}
-            elementType={formElement.config.elementType}
-            elementConfig={formElement.config.elementConfig}
-            value={formElement.config.value}
-            invalid={!formElement.config.valid}
-            shouldValidate={formElement.config.validation}
-            touched={formElement.config.touched}
-            errorMessage={formElement.config.errorMessage}
-            changed={(e) => {
-              inputChangedHandler(e, formElement.id);
-            }}
-          />
-        ))}
+        {props.loading ? (
+          <Spinner />
+        ) : (
+          formElementsArray.map((formElement) => (
+            <Input
+              key={formElement.id}
+              elementType={formElement.config.elementType}
+              elementConfig={formElement.config.elementConfig}
+              value={formElement.config.value}
+              invalid={!formElement.config.valid}
+              shouldValidate={formElement.config.validation}
+              touched={formElement.config.touched}
+              errorMessage={formElement.config.errorMessage}
+              changed={(e) => {
+                inputChangedHandler(e, formElement.id);
+              }}
+            />
+          ))
+        )}
         <Button type="Success">SUBMIT</Button>
       </form>
       <Button
@@ -122,6 +129,13 @@ const Auth = (props) => {
   );
 };
 
+const mapStateToProps = (state) => {
+  return {
+    loading: state.auth.loading,
+    error: state.auth.error,
+  };
+};
+
 const mapDispatchToProps = (dispatch) => {
   return {
     onAuth: (email, password, isSignup) =>
@@ -129,4 +143,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(Auth);
+export default connect(mapStateToProps, mapDispatchToProps)(Auth);
