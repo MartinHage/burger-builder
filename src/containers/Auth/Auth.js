@@ -6,6 +6,7 @@ import * as actions from "../../store/actions/index";
 import { connect } from "react-redux";
 
 const Auth = (props) => {
+  const [isSignup, setIsSignup] = React.useState(true);
   const [controls, setControls] = React.useState({
     email: {
       elementType: "input",
@@ -49,7 +50,7 @@ const Auth = (props) => {
       isValid = value.length <= rules.maxLength && isValid;
     }
     if (rules.isEmail) {
-      const pattern = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       isValid = pattern.test(value) && isValid;
     }
     return isValid;
@@ -82,7 +83,7 @@ const Auth = (props) => {
 
   const submitHandler = (event) => {
     event.preventDefault();
-    props.onAuth(controls.email.value, controls.password.value);
+    props.onAuth(controls.email.value, controls.password.value, isSignup);
   };
 
   const formElementsArray = [];
@@ -109,13 +110,22 @@ const Auth = (props) => {
         ))}
         <Button type="Success">SUBMIT</Button>
       </form>
+      <Button
+        type="Danger"
+        clicked={() => {
+          setIsSignup(!isSignup);
+        }}
+      >
+        SWITCH TO {isSignup ? "SIGNIN" : "SIGNUP"}
+      </Button>
     </div>
   );
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onAuth: (email, password) => dispatch(actions.auth(email, password)),
+    onAuth: (email, password, isSignup) =>
+      dispatch(actions.auth(email, password, isSignup)),
   };
 };
 
