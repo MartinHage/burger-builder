@@ -40,6 +40,12 @@ const Auth = (props) => {
     },
   });
 
+  React.useEffect(() => {
+    if (!props.isBuilding && props.authRedirectPath !== "/") {
+      props.onSetAuthRedirectPath();
+    }
+  }, []);
+
   const checkValidity = (value, rules) => {
     let isValid = true;
     if (rules.required) {
@@ -95,7 +101,7 @@ const Auth = (props) => {
 
   return (
     <div className="Auth">
-      {props.isAuthenticated && <Redirect to="/" />}
+      {props.isAuthenticated && <Redirect to={props.authRedirectPath} />}
       {props.error && <p>{props.error.message}</p>}
       <form onSubmit={submitHandler}>
         {props.loading ? (
@@ -136,6 +142,8 @@ const mapStateToProps = (state) => {
     loading: state.auth.loading,
     error: state.auth.error,
     isAuthenticated: state.auth.token !== null,
+    isBuilding: state.burgerBuilder.building,
+    authRedirectPath: state.auth.authRedirectPath,
   };
 };
 
@@ -143,6 +151,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onAuth: (email, password, isSignup) =>
       dispatch(actions.auth(email, password, isSignup)),
+    onSetAuthRedirectPath: () => dispatch(actions.setAuthRedirectPath("/")),
   };
 };
 

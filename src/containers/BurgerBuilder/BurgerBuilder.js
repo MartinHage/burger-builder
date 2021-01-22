@@ -36,6 +36,7 @@ const BurgerBuilder = (props) => {
     if (props.isAuthenticated) {
       setPurchasing(true);
     } else {
+      props.onSetRedirectPath("/checkout");
       props.history.push("/auth");
     }
   };
@@ -106,6 +107,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(actions.removeIngredient(ingName)),
     onInitIngredients: () => dispatch(actions.initIngredients()),
     onInitPurchase: () => dispatch(actions.purchaseInit()),
+    onSetRedirectPath: (path) => dispatch(actions.setAuthRedirectPath(path)),
   };
 };
 
