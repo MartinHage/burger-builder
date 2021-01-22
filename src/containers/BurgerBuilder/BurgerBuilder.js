@@ -32,6 +32,14 @@ const BurgerBuilder = (props) => {
     props.history.push("/checkout");
   };
 
+  const purchaseHandler = () => {
+    if (props.isAuthenticated) {
+      setPurchasing(true);
+    } else {
+      props.history.push("/auth");
+    }
+  };
+
   const disabledInfo = {
     ...props.ings,
   };
@@ -66,7 +74,8 @@ const BurgerBuilder = (props) => {
           disabled={disabledInfo}
           price={props.price}
           canOrder={updatePurchaseState(props.ings)}
-          setPurchasing={setPurchasing}
+          isAuth={props.isAuthenticated}
+          purchaseHandler={purchaseHandler}
         />
       </>
     );
@@ -86,6 +95,7 @@ const mapStateToProps = (state) => {
     ings: state.burgerBuilder.ingredients,
     price: state.burgerBuilder.totalPrice,
     error: state.burgerBuilder.error,
+    isAuthenticated: state.auth.token !== null,
   };
 };
 
