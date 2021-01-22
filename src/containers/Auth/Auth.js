@@ -5,6 +5,7 @@ import "./Auth.css";
 import * as actions from "../../store/actions/index";
 import { connect } from "react-redux";
 import Spinner from "../../components/UI/Spinner/Spinner";
+import { Redirect } from "react-router-dom";
 
 const Auth = (props) => {
   const [isSignup, setIsSignup] = React.useState(true);
@@ -94,6 +95,7 @@ const Auth = (props) => {
 
   return (
     <div className="Auth">
+      {props.isAuthenticated && <Redirect to="/" />}
       {props.error && <p>{props.error.message}</p>}
       <form onSubmit={submitHandler}>
         {props.loading ? (
@@ -133,6 +135,7 @@ const mapStateToProps = (state) => {
   return {
     loading: state.auth.loading,
     error: state.auth.error,
+    isAuthenticated: state.auth.token !== null,
   };
 };
 
