@@ -108,6 +108,7 @@ const ContactData = (props) => {
       ingredients: props.ings,
       price: props.price,
       orderData: formData,
+      userId: props.userId,
     };
     props.onOrderBurger(order, props.token);
   };
@@ -191,6 +192,7 @@ const mapStateToProps = (state) => {
     price: state.burgerBuilder.totalPrice,
     isLoading: state.order.loading,
     token: state.auth.token,
+    userId: state.auth.userId,
   };
 };
 
