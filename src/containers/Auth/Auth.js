@@ -6,6 +6,7 @@ import * as actions from "../../store/actions/index";
 import { connect } from "react-redux";
 import Spinner from "../../components/UI/Spinner/Spinner";
 import { Redirect } from "react-router-dom";
+import { updateObject, checkValidity } from "../../shared/utility";
 
 const Auth = (props) => {
   const [isSignup, setIsSignup] = React.useState(true);
@@ -46,28 +47,17 @@ const Auth = (props) => {
     }
   }, []);
 
-  const checkValidity = (value, rules) => {
-    let isValid = true;
-    if (rules.required) {
-      isValid = value.trim() !== "" && isValid;
-    }
-    if (rules.minLength) {
-      isValid = value.length >= rules.minLength && isValid;
-    }
-    if (rules.maxLength) {
-      isValid = value.length <= rules.maxLength && isValid;
-    }
-    if (rules.isEmail) {
-      const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      isValid = pattern.test(value) && isValid;
-    }
-    return isValid;
-  };
-
   const inputChangedHandler = (e, inputIdentifier) => {
-    const updatedControls = {
-      ...controls,
-    };
+    const updatedControls = updateObject(controls, {
+      [inputIdentifier]: updateObject(controls[inputIdentifier], {
+        value: e.target.value,
+        valid: checkValidity(
+          e.target.value,
+          controls[inputIdentifier].validation
+        ),
+        touched: true,
+      }),
+    });
     const updatedFormElement = {
       ...updatedControls[inputIdentifier],
     };
@@ -79,13 +69,6 @@ const Auth = (props) => {
     updatedFormElement.touched = true;
     updatedControls[inputIdentifier] = updatedFormElement;
 
-    /*
-    let formValid = true;
-    for (const inputIdentifier in updatedControls) {
-      formValid = updatedControls[inputIdentifier].valid && formValid;
-    }
-    setFormIsValid(formValid);
-    */
     setControls(updatedControls);
   };
 
