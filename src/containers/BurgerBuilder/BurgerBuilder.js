@@ -14,6 +14,7 @@ const BurgerBuilder = (props) => {
 
   React.useEffect(() => {
     props.onInitIngredients();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const updatePurchaseState = (ingredients) => {

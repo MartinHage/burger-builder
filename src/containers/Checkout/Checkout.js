@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import { Redirect, Route } from "react-router-dom";
 import CheckoutSummary from "../../components/Order/CheckoutSummary/CheckoutSummary";
 import ContactData from "./ContactData/ContactData";
-import * as actions from "../../store/actions/index";
 
 const Checkout = (props) => {
   const checkoutCancelledHandler = () => {
@@ -41,10 +40,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    onPurchaseInit: dispatch(actions.purchaseInit()),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Checkout);
+export default connect(mapStateToProps)(Checkout);

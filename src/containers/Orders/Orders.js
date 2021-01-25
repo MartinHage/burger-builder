@@ -9,6 +9,7 @@ import Spinner from "../../components/UI/Spinner/Spinner";
 const Orders = (props) => {
   React.useEffect(() => {
     props.onFetchOrders(props.token, props.userId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
